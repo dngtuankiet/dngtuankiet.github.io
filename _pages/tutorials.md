@@ -22,17 +22,30 @@ This tutorial series covers three main areas:
 #### RISC-V & Chipyard
 - Introduction to RISC-V architecture
 - Setting up and using Chipyard framework
-- Building custom System-on-Chip designs
+- Building your first RISC-V System-on-Chip
+- System Customization
 
-#### Open-Source EDA Tools
-- Overview of open-source Electronic Design Automation tools
+
+#### VLSI Flow
+- Under developement
+
+<!--
+- Overview of open-source Electronic Design Automation (EDA) tools
 - Using Yosys for synthesis
-- Place and route with OpenROAD
+- Place-and-route with OpenROAD
+-->
 
 #### System-on-Chip Design
+- Under developement
+
+<!--
 - Fundamental SoC design principles
 - Understanding bus architectures
 - Memory system design and optimization
+-->
+
+#### Hardware Security
+- Under developement
 
 ---
 

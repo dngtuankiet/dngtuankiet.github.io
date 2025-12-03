@@ -17,19 +17,29 @@ tutorials:
         url: /tutorials/chipyard-getting-started/
       - title: "Building Custom SoCs"
         url: /tutorials/chipyard-custom-socs/
-  - title: "Open-Source EDA Tools"
+      - title: "System Customization"
+        url: /tutorials/chipyard-system-customization/
+  - title: "Hardware Security"
     children:
-      - title: "Introduction to Open-Source EDA"
-        url: /tutorials/eda-introduction/
-      - title: "Synthesis with Yosys"
-        url: /tutorials/eda-yosys/
-      - title: "Place and Route with OpenROAD"
-        url: /tutorials/eda-openroad/
-  - title: "System-on-Chip Design"
-    children:
-      - title: "SoC Design Fundamentals"
-        url: /tutorials/soc-fundamentals/
-      - title: "Bus Architectures"
-        url: /tutorials/soc-bus-architectures/
-      - title: "Memory Systems"
-        url: /tutorials/soc-memory-systems/
+      - title: "Hardware Security Basics"
+        url: /tutorials/hardware-security-basics/
+      - title: "Hardware Security Primitives"
+        url: /tutorials/hardware-security-primitives/
+      - title: "Countermeasures and Defenses"
+        url: /tutorials/security-countermeasures/
+  # - title: "VLSI Flow"
+  #     children:
+  #       - title: "Introduction to Open-Source EDA"
+  #         url: /tutorials/eda-introduction/
+  #       - title: "Synthesis with Yosys"
+  #         url: /tutorials/eda-yosys/
+  #       - title: "Place and Route with OpenROAD"
+  #         url: /tutorials/eda-openroad/
+  #   - title: "System-on-Chip Design"
+  #     children:
+  #       - title: "SoC Design Fundamentals"
+  #         url: /tutorials/soc-fundamentals/
+  #       - title: "Bus Architectures"
+  #         url: /tutorials/soc-bus-architectures/
+  #       - title: "Memory Systems"
+  #         url: /tutorials/soc-memory-systems/

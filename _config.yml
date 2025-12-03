@@ -115,7 +115,7 @@ analytics:
 author:
   name             : "Dang Tuan Kiet"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "PhD student at The Universify of Electro-Communications (UEC), Tokyo, Japan. Research interests include Computer Architecture, System-on-Chip (SoC) Design, Embedded Systems, Low Power Design, Hardware Security, AI and Machine Learning."
+  bio              : "A PhD student passionate about RISC-V systems and hardware security on FPGA and semiconductor, and open-source enthusiast."
   location         : "Tokyo, Japan"
   email            : "dngtuankiet97@gmail.com"
   links:
