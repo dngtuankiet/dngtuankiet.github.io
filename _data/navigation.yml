@@ -1,12 +1,35 @@
 # main links
 main:
-  - title: "Quick-Start Guide"
-    url: https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/
-  # - title: "About"
-  #   url: https://mmistakes.github.io/minimal-mistakes/about/
-  # - title: "Sample Posts"
-  #   url: /year-archive/
-  # - title: "Sample Collections"
-  #   url: /collection-archive/
-  # - title: "Sitemap"
-  #   url: /sitemap/
+  - title: "About"
+    url: /about/
+  - title: "Tutorials"
+    url: /tutorials/
+  - title: "Projects"
+    url: /projects/
+
+# tutorials sidebar navigation
+tutorials:
+  - title: "RISC-V & Chipyard"
+    children:
+      - title: "Introduction to RISC-V"
+        url: /tutorials/risc-v-introduction/
+      - title: "Getting Started with Chipyard"
+        url: /tutorials/chipyard-getting-started/
+      - title: "Building Custom SoCs"
+        url: /tutorials/chipyard-custom-socs/
+  - title: "Open-Source EDA Tools"
+    children:
+      - title: "Introduction to Open-Source EDA"
+        url: /tutorials/eda-introduction/
+      - title: "Synthesis with Yosys"
+        url: /tutorials/eda-yosys/
+      - title: "Place and Route with OpenROAD"
+        url: /tutorials/eda-openroad/
+  - title: "System-on-Chip Design"
+    children:
+      - title: "SoC Design Fundamentals"
+        url: /tutorials/soc-fundamentals/
+      - title: "Bus Architectures"
+        url: /tutorials/soc-bus-architectures/
+      - title: "Memory Systems"
+        url: /tutorials/soc-memory-systems/
