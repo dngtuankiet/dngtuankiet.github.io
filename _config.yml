@@ -26,7 +26,7 @@ url                      : "https://dngtuankiet.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "dngtuankiet/dngtuankiet.github.io"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
-logo                     : #/assets/images/88x88.png
+logo                     : /assets/images/logo_website.png
 masthead_title           : # overrides the website title displayed in the masthead, use " " for no title
 breadcrumbs              : # true, false (default)
 words_per_minute         : 200
@@ -114,7 +114,7 @@ analytics:
 # Site Author
 author:
   name             : "Dang Tuan Kiet"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : /assets/images/avatar_website.png
   bio              : "I am a PhD student and hardware design hobbyist working to make hardware and VLSI design more accessible to enthusiasts and newcomers through open-source tools. I hope my efforts can support the broader community and help advance digital design and prototyping."
   location         : "Tokyo, Japan"
   email            : "dngtuankiet97@gmail.com"
