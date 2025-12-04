@@ -9,15 +9,16 @@ toc: true
 toc_label: "On This Page"
 toc_icon: "list"
 toc_sticky: true
+classes: text-justify
 ---
 
 ## Welcome to Tutorials
 
 Welcome to the tutorials section! Here you'll find comprehensive guides on open-source semiconductor projects, RISC-V systems, and EDA tools.
 
-### What You'll Learn
+### Tutorials and Examples
 
-This tutorial series covers three main areas:
+This tutorial series covers four main areas:
 
 #### RISC-V & Chipyard
 - Introduction to RISC-V architecture

@@ -9,40 +9,54 @@ toc: true
 toc_label: "On This Page"
 toc_icon: "list"
 toc_sticky: true
+classes: text-justify
 ---
 
 ## Introduction
 
 This tutorial walks through the process of generating RTL for custom SoCs in Chipyard and creating bootable SD cards for FPGA prototyping.
+By default, Chipyard supports several FPGA platforms like arty35t, arty100t, vc707, vcu118. I added to the list kr260 FPGA. And most of my projects, I tested on arty100t and kr260 FPGAs, therefore let's focus on these two. I have made modifications on these two platforms to match my design requirement for chip fabrication, you can checkout Chipyard arty100t in the `fpga/` directory to see the original configurations.
 
 ## Prerequisites
+### Hardware requirements:
+Although it is possible to run simulation of the RISC-V systems, the current tutorial will provide only demonstration on FGPA, the simulation section will be added later.
+For simplicity, starting with budget FPGA like arty100t is approachable for everyone. The lists of equipments is as follow:
+- [Arty100t FPGA](https://digilent.com/shop/arty-a7-100t-artix-7-fpga-development-board/?srsltid=AfmBOoqGBwQYnGmrHKKIr8oUDSaQ6YhhXt9c9vn7jr58Gr7PrNe5fuNK)
+- [PMOD SD card](https://digilent.com/shop/pmod-microsd-microsd-card-slot/?srsltid=AfmBOoroPlXlp7gaxir_A5DTaYPv2IFoF5bUb9InJiAeKWULyHnqsvBq)
+- An SD card (recommend 4GB)
 
+### Software requirements:
 - Chipyard environment set up (see [Getting Started with Chipyard](/tutorials/chipyard-getting-started/))
 - Source the Chipyard environment:
-  ```bash
-  cd chipyard
-  source env.sh
-  ```
-
-## RTL Generation
-
-### Understanding the Build System
-
-Chipyard uses a Makefile-based build system to generate RTL from high-level Chisel descriptions. The generated RTL can be used for simulation, FPGA prototyping, or ASIC implementation.
-
-### Basic RTL Generation
-
-To generate RTL for a default RocketChip configuration:
 
 ```bash
-cd sims/vcs  # or sims/verilator
-make CONFIG=RocketConfig
+cd chipyard-1.13.0
+source env.sh
+```
+
+## 1. Step-by-step RTL Generation
+
+I mentioned earlier in [Getting Started with Chipyard](/tutorials/chipyard-getting-started/), the `base/` directory is the main developement for our RISC-V system. Let's change the working directory to `base`:
+
+```bash
+# Change working directory to base before make anything
+cd base/
+```
+
+### 1.1 RTL Generation
+In the `Makefile`, the default configuration for a RISC-V system feature a 32-bit Rocket core on arty100t FPGA. Let's generate RTL for this default RocketChip configuration:
+
+```bash
+# Inside base/ directory
+make SUB_PROJECT=arty100t verilog
+# Or simpler with default
+make verilog
 ```
 
 This command will:
 1. Elaborate the Chisel design
 2. Generate Verilog RTL
-3. Place output in `generated-src/`
+3. Place output in `base/generated-src/`
 
 ### Custom Configuration RTL Generation
 

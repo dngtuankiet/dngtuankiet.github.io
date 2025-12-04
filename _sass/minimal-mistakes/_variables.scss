@@ -6,7 +6,7 @@
    Typography
    ========================================================================== */
 
-$doc-font-size: 16px !default;
+$doc-font-size: 14px !default; //was 16px
 $doc-font-size-medium: $doc-font-size * 1.125 !default;
 $doc-font-size-large: $doc-font-size * 1.25 !default;
 $doc-font-size-x-large: $doc-font-size * 1.375 !default;
@@ -78,6 +78,16 @@ $type-size-5: 1em !default; // ~16px
 $type-size-6: 0.75em !default; // ~12px
 $type-size-7: 0.6875em !default; // ~11px
 $type-size-8: 0.625em !default; // ~10px
+
+/* type scale */
+// $type-size-1: 2.2em !default;   // was 2.441em
+// $type-size-2: 1.8em !default;   // was 1.953em
+// $type-size-3: 1.4em !default;   // was 1.563em
+// $type-size-4: 1.15em !default;  // was 1.25em
+// $type-size-5: 0.95em !default;  // was 1em
+// $type-size-6: 0.7em !default;   // was 0.75em
+// $type-size-7: 0.65em !default;  // was 0.6875em
+// $type-size-8: 0.6em !default;   // was 0.625em
 
 /* headline scale */
 $h-size-1: 1.563em !default; // ~25.008px
