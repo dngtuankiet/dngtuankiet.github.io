@@ -21,7 +21,7 @@ title                    : "Home Page"
 title_separator          : "-"
 subtitle                 : "Welcome to my personal website"
 name                     : "Dang Tuan Kiet"
-description              : "Personal website featuring tutorials on open-source semiconductor projects with RISC-V systems using Chipyard, and exploring the future of open-source EDA tools for semiconductor design flows."
+description              : ""
 url                      : "https://dngtuankiet.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "dngtuankiet/dngtuankiet.github.io"
@@ -115,7 +115,7 @@ analytics:
 author:
   name             : "Dang Tuan Kiet"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "A PhD student passionate about RISC-V systems and hardware security on FPGA and semiconductor, and open-source enthusiast."
+  bio              : "I am a PhD student and hardware design hobbyist working to make hardware and VLSI design more accessible to enthusiasts and newcomers through open-source tools. I hope my efforts can support the broader community and help advance digital design and prototyping."
   location         : "Tokyo, Japan"
   email            : "dngtuankiet97@gmail.com"
   links:
