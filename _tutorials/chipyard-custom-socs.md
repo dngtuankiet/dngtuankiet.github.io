@@ -43,8 +43,54 @@ I mentioned earlier in [Getting Started with Chipyard](/tutorials/chipyard-getti
 cd base/
 ```
 
-### 1.1 RTL Generation
+### 1.1 Common Make Targets
+In the `Makefile`, the default configuration for a RISC-V system choose the base configuration for both arty100t and kr260.
+The make command can choose which FPGA platform, and system configurations
+
+Example command:
+```bash
+# Example full command
+make SUB_PROJECT=arty100t CONFIG=BaseRocketKR260Config <command>
+
+# Example default 
+make <command> #default: SUB_PROJECT=arty100t CONFIG=BaseRocketKR260Config
+
+# Example default kr260
+make SUB_PROJECT=kr260 <command>
+```
+### 1.2 Common Make Targets
+
+| Command | Description |
+|---------|-------------|
+| `make SUB_PROJECT=X CONFIG=Y verilog` | Generate RTL for configuration Y on FPGA X |
+| `make SUB_PROJECT=X CONFIG=Y bitstream` | Generate bitstream for configuration Y on FPGA X |
+| `make clean` | Clean build |
+
+**Available Configurations:**
+
+| SUB_PROJECT | CONFIG |
+|-------------|--------|
+| arty100t | BaseRocketArty100TConfig |
+| arty100t | AsicCompatibleRocketArty100TConfig |
+| kr260 | BaseRocketKR260Config |
+| kr260 | RAM32KBRocketKR260Config |
+| kr260 | DualCoreRocketKR260Config |
+
+
+
+
+
+
+
+
+
+
+
+
+### 1.3 RTL Generation
 In the `Makefile`, the default configuration for a RISC-V system feature a 32-bit Rocket core on arty100t FPGA. Let's generate RTL for this default RocketChip configuration:
+
+
 
 ```bash
 # Inside base/ directory

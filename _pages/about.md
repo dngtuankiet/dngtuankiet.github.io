@@ -6,7 +6,7 @@ author_profile: true
 classes: text-justify
 ---
 
-Thank you for visiting my site. Whether you are a researcher, engineer, recruiter, colleague, or simply exploring out of curiosity, I hope you will find content here that is useful.
+Thank you for visiting my site. Whether you are a researcher, engineer, recruiter, colleague, or simply exploring out of curiosity, I hope you will find content here useful.
 
 ## About This Website
 
