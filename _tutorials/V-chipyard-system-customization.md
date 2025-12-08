@@ -29,24 +29,48 @@ This tutorial series walks through practical customization scenarios, from simpl
 ## Customization Topics
 
 ### [Rocket Core](/tutorials/V-chipyard-system-customization/core/)
-- Topic overview 1
-- What you'll learn
-- Prerequisites
+**Customize RISC-V core parameters including ISA extensions, cache sizes, and pipeline configurations.**
+
+Learn how to:
+- Modify core microarchitecture parameters
+- Configure ISA extensions (M, A, F, D, C)
+- Tune cache sizes and associativity
+- Select between in-order (Rocket) and out-of-order (BOOM) cores
+
+Prerequisites: Basic RISC-V ISA knowledge, Scala familiarity
 
 ### [Memory Subsystem](/tutorials/V-chipyard-system-customization/memory/)
-- Topic overview 2
-- What you'll learn
-- Prerequisites
+**Optimize the memory hierarchy for your workload requirements.**
 
-### [Peripherals](/tutorials/V-chipyard-system-customizaton/peripherals)
-- Topic overview 3
-- What you'll learn
-- Prequisites
+Learn how to:
+- Configure L1/L2 cache parameters
+- Add memory channels for higher bandwidth
+- Use scratchpads for deterministic access
+- Choose between inclusive L2 and broadcast hub
 
-### [Custom Accelerators](/tutorials/V-chipyard-system-customizaton/accelerators)
-- Topic overview 4
-- What you'll learn
-- Prequisites
+Prerequisites: Understanding of cache organization, memory hierarchies
+
+### [Peripherals](/tutorials/V-chipyard-system-customization/peripherals/)
+**Integrate standard and custom MMIO peripherals into your SoC.**
+
+Learn how to:
+- Add memory-mapped I/O devices
+- Create custom TileLink peripherals
+- Integrate standard interfaces (UART, SPI, GPIO)
+- Handle interrupts and device trees
+
+Prerequisites: Memory-mapped I/O concepts, basic TileLink knowledge
+
+### [Custom Accelerators](/tutorials/V-chipyard-system-customization/accelerators/)
+**Design and integrate domain-specific accelerators for performance gains.**
+
+Learn how to:
+- Create RoCC (Rocket Custom Coprocessor) accelerators
+- Build MMIO-based accelerators
+- Add DMA devices for high-bandwidth access
+- Interface accelerators with software
+
+Prerequisites: Strong Chisel knowledge, accelerator architecture basics
 
 ## Getting Started
 
