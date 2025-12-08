@@ -1,7 +1,8 @@
 ---
 layout: single
 title: "Introduction to RISC-V"
-permalink: /tutorials/risc-v-introduction/
+permalink: /tutorials/I-risc-v-introduction/
+date: 2025-01-01
 author_profile: false
 sidebar:
   nav: "tutorials"

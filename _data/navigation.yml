@@ -11,24 +11,28 @@ main:
 tutorials:
   - title: "RISC-V & Chipyard"
     children:
-      - title: "Introduction to RISC-V"
-        url: /tutorials/risc-v-introduction/
-      - title: "Getting Started with Chipyard"
-        url: /tutorials/chipyard-getting-started/
-      - title: "Understanding Chipyard SoC"
-        url: /tutorials/understand-chipyard-system/
-      - title: "Building Custom SoCs"
-        url: /tutorials/chipyard-custom-socs/
-      - title: "System Customization"
-        url: /tutorials/chipyard-system-customization/
+      - title: "I. Introduction to RISC-V"
+        url: /tutorials/I-risc-v-introduction/
+      - title: "II. Getting Started with Chipyard"
+        url: /tutorials/II-chipyard-getting-started/
+      - title: "III. Understanding Chipyard SoC"
+        url: /tutorials/III-understand-chipyard-system/
+      - title: "IV. Building Custom SoCs"
+        url: /tutorials/IV-chipyard-custom-socs/
+      - title: "V. System Customization"
+        url: /tutorials/V-chipyard-system-customization/
+      - title: "  ↳ Customizing Core Parameters"
+        url: /tutorials/V-chipyard-system-customization/core/
+      - title: "  ↳ Memory Subsystem Modifications"
+        url: /tutorials/V-chipyard-system-customization/memory/
   - title: "Hardware Security"
     children:
-      - title: "Hardware Security Basics"
-        url: /tutorials/hardware-security-basics/
-      - title: "Hardware Security Primitives"
-        url: /tutorials/hardware-security-primitives/
-      - title: "Countermeasures and Defenses"
-        url: /tutorials/security-countermeasures/
+      - title: "I. Hardware Security Basics"
+        url: /tutorials/hardware-security/I-hardware-security-basics/
+      - title: "II. Hardware Security Primitives"
+        url: /tutorials/hardware-security/II-hardware-security-primitives/
+      - title: "III. Countermeasures and Defenses"
+        url: /tutorials/hardware-security/III-hardware-security-countermeasures/
   # - title: "VLSI Flow"
   #     children:
   #       - title: "Introduction to Open-Source EDA"

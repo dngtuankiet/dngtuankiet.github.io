@@ -1,7 +1,8 @@
 ---
 layout: single
 title: "Getting Started with Chipyard"
-permalink: /tutorials/chipyard-getting-started/
+permalink: /tutorials/II-chipyard-getting-started/
+date: 2025-01-02
 author_profile: false
 sidebar:
   nav: "tutorials"
@@ -38,7 +39,7 @@ Once you have these in place, you’ll be in good shape for the installation.
 
 ## 1. Installation
 
-### 1.1 System Dependencies
+### 1.1 System Dependencies & necessary tools
 
 Chipyard needs a handful of development packages before it can build anything. Here’s the list I usually install right away:
 
@@ -46,9 +47,11 @@ Chipyard needs a handful of development packages before it can build anything. H
 # Ubuntu/Debian
 sudo apt-get install autoconf automake autotools-dev curl python3 \
   libmpc-dev libmpfr-dev libgmp-dev gawk build-essential bison flex \
-  texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev
+  texinfo gperf libtool patchutils bc zlib1g-dev libexpat-dev liibpopt-dev \
 
 sudo apt-get install build-essentials git
+
+sudo apt-get install microcom # communicating with devices over a serial connection
 ```
 
 ### 1.2 Install conda or miniconda

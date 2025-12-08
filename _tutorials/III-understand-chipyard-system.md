@@ -1,7 +1,8 @@
 ---
 layout: single
 title: "Understanding Chipyard System"
-permalink: /tutorials/understand-chipyard-system/
+permalink: /tutorials/III-understand-chipyard-system/
+date: 2025-01-03
 author_profile: false
 sidebar:
   nav: "tutorials"
