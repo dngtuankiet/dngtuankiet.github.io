@@ -26,10 +26,15 @@ System customization in Chipyard involves multiple layers:
 
 This tutorial series walks through practical customization scenarios, from simple parameter changes to adding entirely new hardware modules.
 
-## Customization Topics
+## 1. Customization Topics
 
-### [Rocket Core](/tutorials/V-chipyard-system-customization/core/)
-**Customize RISC-V core parameters including ISA extensions, cache sizes, and pipeline configurations.**
+![Chipyard System Customization Overview](/assets/images/tutorials/custom-rocket-chip.png)
+{: .text-center}
+
+
+
+### 1.1 [Rocket Core](/tutorials/V-chipyard-system-customization/core/)
+**Customize RISC-V core parameters including ISA extensions, cache sizes**
 
 Learn how to:
 - Modify core microarchitecture parameters
@@ -39,29 +44,29 @@ Learn how to:
 
 Prerequisites: Basic RISC-V ISA knowledge, Scala familiarity
 
-### [Memory Subsystem](/tutorials/V-chipyard-system-customization/memory/)
+### 1.2 [Memory Subsystem](/tutorials/V-chipyard-system-customization/memory/)
 **Optimize the memory hierarchy for your workload requirements.**
 
 Learn how to:
 - Configure L1/L2 cache parameters
 - Add memory channels for higher bandwidth
-- Use scratchpads for deterministic access
 - Choose between inclusive L2 and broadcast hub
+- Use scratchpads or DRAM IP (FPGA only) for memories
 
 Prerequisites: Understanding of cache organization, memory hierarchies
 
-### [Peripherals](/tutorials/V-chipyard-system-customization/peripherals/)
+### 1.3 [Peripherals](/tutorials/V-chipyard-system-customization/peripherals/)
 **Integrate standard and custom MMIO peripherals into your SoC.**
 
 Learn how to:
+- Integrate standard interfaces (UART, SPI, GPIO)
 - Add memory-mapped I/O devices
 - Create custom TileLink peripherals
-- Integrate standard interfaces (UART, SPI, GPIO)
-- Handle interrupts and device trees
+- Add memory-mapped I/O devices with external I/O pins
 
 Prerequisites: Memory-mapped I/O concepts, basic TileLink knowledge
 
-### [Custom Accelerators](/tutorials/V-chipyard-system-customization/accelerators/)
+### 1.4 [Custom Accelerators](/tutorials/V-chipyard-system-customization/accelerators/)
 **Design and integrate domain-specific accelerators for performance gains.**
 
 Learn how to:
@@ -72,7 +77,7 @@ Learn how to:
 
 Prerequisites: Strong Chisel knowledge, accelerator architecture basics
 
-## Getting Started
+## 2. Before Getting Started
 
 Before diving into customization, ensure you have:
 - Completed [Getting Started with Chipyard](/tutorials/II-chipyard-getting-started/)
@@ -80,7 +85,7 @@ Before diving into customization, ensure you have:
 - Basic understanding of Scala/Chisel
 - Familiarity with the Rocket Chip generator
 
-## Configuration Hierarchy
+<!-- ## Configuration Hierarchy
 
 Chipyard uses a layered configuration system built on top of the Rocket Chip parameter system. Understanding this hierarchy is essential for effective customization:
 
@@ -130,13 +135,18 @@ chipyard/
 │   └── rocket-chip/          # Core generator source
 ├── base/src/main/scala/      # Your custom FPGA platform configs
 └── base/src/main/resources/  # BootROM and initialization code
-```
+``` -->
 
 ## Next Steps
 
-Explore the child tutorials to learn specific customization techniques:
-1. [Child Item 1](/tutorials/V-chipyard-system-customization/child1/) - (TBD)
-2. [Child Item 2](/tutorials/V-chipyard-system-customization/child2/) - (TBD)
+Choose a customization path based on your project needs:
+
+1. **[Rocket Core Configuration](/tutorials/V-chipyard-system-customization/core/)** - Start here if you need to modify ISA extensions, cache parameters, or core count
+2. **[Memory Subsystem](/tutorials/V-chipyard-system-customization/memory/)** - Optimize memory hierarchy for bandwidth or latency requirements
+3. **[Peripherals Integration](/tutorials/V-chipyard-system-customization/peripherals/)** - Add standard interfaces or custom MMIO devices
+4. **[Custom Accelerators](/tutorials/V-chipyard-system-customization/accelerators/)** - Design domain-specific hardware for performance-critical tasks
+
+Each tutorial builds on the base Chipyard system and can be followed independently or combined for complex designs.
 
 ## Resources
 

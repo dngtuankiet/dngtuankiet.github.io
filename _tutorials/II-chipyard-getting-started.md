@@ -156,11 +156,6 @@ Now that Chipyard is installed and you know your way around the directory tree, 
 Some next steps:
 - [Understanding Chipyard RISC-V system](/tutorials/understand-chipyard-system/)
 - [Building your first RISC-V system](/tutorials/chipyard-custom-socs/)
-- Add your own accelerator as a MMIO peripheral
-- Add DMA to your accelrator
-- Add your own accelerator as a RoCC accelerator
-- Customize the BootROM or software stack
-- Customize FPGA Input/Output
 
 ## Troubleshooting
 

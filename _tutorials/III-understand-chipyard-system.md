@@ -15,17 +15,21 @@ classes: text-justify
 
 ## Overview
 
-Chipyard is a sophisticated framework that integrates multiple components to enable RISC-V SoC design, simulation, and deployment. Understanding the architecture and organization of Chipyard is essential for effectively customizing and extending your designs. This tutorial provides a comprehensive overview of the Chipyard system structure, including its generators, tools, and key architectural concepts.
+Chipyard is a sophisticated framework that integrates multiple components to enable RISC-V SoC design, simulation, and deployment. Understanding the architecture and organization of Chipyard is essential for effectively customizing and extending your designs. This page provides an overview of the Chipyard system structure, including its generators, tools, and architectural concepts. 
 
-## Chipyard Architecture
+**Rocket Chip** is the key system for further customization. This page also describes some key aspects including:
+- Rocket system architecture
+- TileLink bus interface
+
+## 1. Chipyard Architecture
 
 At its core, Chipyard is built around the concept of **generators** - parameterized RTL designs written using meta-programming techniques enabled by the Chisel hardware description language. These generators allow for flexible, automated integration of complex hardware designs that can be configured for various use cases without manual RTL modifications.
 
-### Core Components
+### 1.1 Core Components
 
 Chipyard organizes its ecosystem into several key categories:
 
-#### 1. RTL Generators
+#### 1.1.1 RTL Generators
 
 Generators are the heart of Chipyard, providing configurable hardware components that can be instantiated with different parameters. Key generators include:
 
@@ -49,7 +53,7 @@ Generators are the heart of Chipyard, providing configurable hardware components
 - **rocket-chip-blocks**: Peripheral devices including UART, SPI, JTAG, I2C, PWM
 - **testchipip**: Testing utilities and chip interfacing components
 
-#### 2. Development Tools
+#### 1.1.2 Development Tools
 
 **Chisel & FIRRTL:**
 - **Chisel**: A hardware description library embedded in Scala enabling RTL meta-programming
@@ -58,7 +62,7 @@ Generators are the heart of Chipyard, providing configurable hardware components
 
 **Dsptools:** Chisel library for signal processing hardware development
 
-#### 3. Toolchains
+#### 1.1.3 Toolchains
 
 **riscv-tools**: Comprehensive collection including:
 - Compiler and assembler toolchains
@@ -66,36 +70,39 @@ Generators are the heart of Chipyard, providing configurable hardware components
 - Berkeley Boot Loader (BBL) and proxy kernel
 - Essential for developing and executing RISC-V software
 
-#### 4. Simulation Environments
+#### 1.1.4 Simulation Environments
 
 - **Verilator**: Open-source Verilog simulator for software RTL simulation
 - **VCS**: Synopsys proprietary simulator (requires license)
 - **FireSim**: FPGA-accelerated simulation platform on AWS EC2 F1 instances, providing fast (10s-100s MHz) deterministic simulation
 
-#### 5. Software Tools
+#### 1.1.5 Software Tools
 
 - **FireMarshal**: Default workload generation tool for creating software to run on Chipyard platforms
 - **Baremetal-IDE**: Integrated development environment for baremetal C/C++ programs
 
-#### 6. VLSI & Prototyping
+#### 1.1.6 VLSI & Prototyping
 
 - **Hammer**: VLSI flow providing abstraction between physical design concepts and vendor-specific EDA tools
 - **FPGA Prototyping**: Support for various FPGA boards (Xilinx Arty 35T, VCU118) using SiFive's fpga-shells
 
-## Rocket Chip System Architecture
+## 2. Rocket Chip System Architecture
+Personally, I've been using **Rocket Chip** for a majority of my research. This tutorial will extend  the customization based on the Rocket system architecture. As the **Rocket Chip** generator forms the foundation of most Chipyard SoCs, understanding its architecture is crucial for system customization. Below is the figure describing the system.
 
-The **Rocket Chip** generator forms the foundation of most Chipyard SoCs. Understanding its architecture is crucial for system customization.
+<p align="center">
+   <img src="/assets/images/tutorials/rocket-chip.png" alt="Rocket Chip" width="600">
+</p>
 
-### Tile-Based Organization
 
-Rocket Chip organizes processors into **tiles**. Each tile typically contains:
+### 2.1 Tile-Based Organization
+
+Rocket Chip organizes processors into **tiles**. Each Rocket core is wrapped in a tile with its corressponding components:
 - A processor core (Rocket, BOOM, or custom)
-- L1 instruction cache
-- L1 data cache  
+- L1 cache (instruction & data)
 - Page table walker (PTW)
 - Optional RoCC (Rocket Custom Coprocessor) accelerator interface
 
-### Memory Hierarchy
+### 2.2 Memory Hierarchy
 
 The memory system is organized hierarchically using TileLink interconnects:
 
@@ -104,7 +111,7 @@ The memory system is organized hierarchically using TileLink interconnects:
 3. **MemoryBus**: Connects L2 to the DRAM controller via TileLink-to-AXI4 converter
 4. **FrontendBus**: Dedicated bus for DMA devices with direct memory access
 
-### MMIO Peripheral Buses
+### 2.3 MMIO Peripheral Buses
 
 Memory-mapped I/O peripherals connect through two specialized buses:
 
@@ -119,13 +126,13 @@ Memory-mapped I/O peripherals connect through two specialized buses:
 - Block storage devices
 - External AXI4 ports for vendor IP integration
 
-### DMA Architecture
+### 2.4 DMA Architecture
 
 Direct Memory Access devices connect to the **FrontendBus**, allowing them to read/write directly from the memory system without CPU intervention. The bus supports both native TileLink devices and vendor AXI4 devices through protocol converters.
 
-## TileLink & Diplomacy
+## 3. TileLink & Diplomacy
 
-### TileLink Protocol
+### 3.1 TileLink Protocol
 
 TileLink is the cache-coherent memory protocol used throughout Chipyard systems. It defines how modules communicate:
 - **Caches** maintain coherency
@@ -133,9 +140,9 @@ TileLink is the cache-coherent memory protocol used throughout Chipyard systems.
 - **Peripherals** respond to MMIO accesses
 - **DMA devices** initiate transactions
 
-TileLink supports multiple conformance levels from simple memory-mapped interfaces to full cache coherence protocols.
+TileLink supports multiple conformance levels from simple memory-mapped interfaces to full cache coherence protocols. You can find more information about TileLink interface in the references.
 
-### Diplomacy Framework
+### 3.2 Diplomacy Framework
 
 **Diplomacy** is a meta-programming framework for negotiating connections between generators during elaboration:
 
@@ -152,19 +159,26 @@ TileLink supports multiple conformance levels from simple memory-mapped interfac
 
 This automatic negotiation eliminates manual configuration and reduces integration errors when composing complex systems.
 
-## Directory Structure
+## 4. Directory Structure
 
-Chipyard organizes its source code logically:
+Chipyard organizes its source code as followed:
 
 ```
 chipyard/
 ├── generators/          # RTL generator source code
 │   ├── rocket-chip/    # Rocket Chip SoC generator
 │   ├── boom/           # BOOM core
-│   ├── chipyard/       # Chipyard-specific glue logic
+│   ├── chipyard/       # Top-level integration layer, config mixins, test harnesses
+|   ├── testchipip/     # Chipyard utilities (TSI, SerialTL, boot ROM helper)
+|   ├── diplomacy/      # TileLink/AXI interconnect generation framework
 │   ├── constellation/  # NoC generator
-│   ├── gemmini/        # Matrix accelerator
+│   ├── gemmini/, ara/, nvdla/     # Hardware accelerators
 │   └── ...
+├── fpga/               # Experimental FPGA flow
+|   ├── fpga-shells/    # FPGA board support
+|   ├── src/main/
+|       ├── scala       # Board-specific Scala configs (arty35t/100t, vc707, etc.)
+|       ├── resources/  # Bootrom sources
 ├── sims/               # Simulation environments
 │   ├── verilator/     # Verilator simulator
 │   ├── vcs/           # VCS simulator
@@ -177,7 +191,7 @@ chipyard/
 └── software/           # Software tools (FireMarshal, etc.)
 ```
 
-## Configuration System
+## 5. Configuration System
 
 Chipyard uses a powerful configuration system based on Scala case classes and mixins:
 
@@ -209,9 +223,6 @@ This approach enables:
 ## Next Steps
 
 Now that you understand the Chipyard system architecture, you're ready to explore:
-- **Part IV**: Creating custom SoC configurations
-- **Part V**: Advanced system customization techniques
-- Adding custom accelerators and peripherals
-- Optimizing memory hierarchies for your workload
-
+- **[Part IV](/tutorials/IV-chipyard-custom-socs/)**: Building your custom Rocket Chip
+- **[Part V](/tutorials/V-chipyard-system-customization/)**: System customization
 

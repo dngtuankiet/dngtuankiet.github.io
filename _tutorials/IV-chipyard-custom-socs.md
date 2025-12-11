@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "Building Custom SoCs with Chipyard"
+title: "Building Custom Rocket Chip with Chipyard"
 permalink: /tutorials/IV-chipyard-custom-socs/
 date: 2025-01-04
 author_profile: false
@@ -393,7 +393,7 @@ When customizing your SoC:
 After generating the bitstream, Chipyard places all elaborated and compiled artifacts into the generated-src/ directory. This folder contains many files, but only some of them are essential when verifying your SoC—either for FPGA bring-up or when preparing for chip fabrication.
 This section highlights the important files and what they are used for.
 
-### 3.1 Generated Files' Descriptions
+### 3.1 Overview of Generated Files
 Below is an overview of the major file groups found in generated-src/ and how they help during debugging or validation.
 
 ```
@@ -436,48 +436,6 @@ generated-src/
   └── *.v                                # All generated Verilog files go here
 ```
 
-<!-- 1. **Memory Map & Register Documentation**
-These files describe how the software will see the hardware:
-- *.memmap.json — Complete memory map showing all peripheral base addresses and memory regions.
-- 0x*.regmap.json — Register maps for each memory-mapped device (UART, SPI, GPIO, etc.).
-- *.dts — Device Tree Source file used by the bootloader/OS; useful for verifying addresses, interrupts, and clock settings.
-
-2. **Hardware Design Files**
-These are generated during the Chisel → FIRRTL → Verilog flow:
-- *.fir — FIRRTL intermediate representation of the design.
-- *.anno.json — Annotations generated during FIRRTL transforms.
-- *.appended.anno.json — Additional annotations added later in the pipeline.
-- *.graphml — A graph view of the SoC topology (great for understanding interconnect structure).
-
-3. **FPGA Synthesis Files**
-These are the files Vivado needs in order to build the FPGA design:
-- *.all.f — Full list of Verilog files used for synthesis.
-- *.top.f — File list containing only the top-level hierarchy.
-- *.model.f — Behavioral/simulation model file list.
-- *.bb.f — List of black-box modules (e.g., PLLs, vendor IPs).
-- *.shell.vivado.tcl — Vivado integration script for building the FPGA design.
-- *.shell.xdc — Xilinx constraints (pinout, timing).
-- *.shell.sdc — SDC timing constraints.
-- *.harnessSysPLLNode.vivado.tcl — Script for generating clocking/PLL IPs.
-
-4. **Memory Configuration**
-These files describe the internal memories in the design:
-- *.mems.conf — Memory compiler config for all SRAM/register files.
-- *.top.mems.conf / *.top.mems.fir — Memory configuration for the ChipTop hierarchy.
-- *.model.mems.conf / *.model.mems.fir — Memory configuration used for simulation models.
-
-5. **Build Metadata**
-These files are useful when debugging elaboration or synthesis issues:
-- *.d — Dependency tracking file generated during building.
-- *.chisel.log — Log file from elaboration; check for warnings.
-- *.firtool.log — Log from FIRRTL → Verilog compilation via CIRCT.
-- *.plusArgs — Simulation plus-args configuration.
-- *_module_hierarchy.json — Full module hierarchy and instantiations.
-- *.json — Miscellaneous metadata about the generated SoC. -->
-
-<!-- 6. **Verilog Collateral Directory**
-- `gen-collateral/` — Contains all generated Verilog files. This is the main directory Vivado uses during synthesis. -->
-
 ### 3.2 Key Verification Steps for FPGA Bring-up
 1. **Device Tree (*.dts)**
 - Confirm CPU ISA string is correct as intended (e.g rv32i)
@@ -511,6 +469,6 @@ Based on these files, software developers can write bootROM code and drivers for
 ## References
 
 - [Chipyard Documentation](https://chipyard.readthedocs.io/)
-- [RISC-V Proxy Kernel](https://github.com/riscv/riscv-pk)
-- [OpenSBI Documentation](https://github.com/riscv/opensbi)
-- [Buildroot User Manual](https://buildroot.org/docs.html)
+<!-- - [RISC-V Proxy Kernel](https://github.com/riscv/riscv-pk) -->
+<!-- - [OpenSBI Documentation](https://github.com/riscv/opensbi) -->
+<!-- - [Buildroot User Manual](https://buildroot.org/docs.html) -->
