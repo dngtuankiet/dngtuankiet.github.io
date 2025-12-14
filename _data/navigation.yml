@@ -23,14 +23,15 @@ tutorials:
         url: /tutorials/IV-chipyard-custom-socs/
       - title: "V. System Customization"
         url: /tutorials/V-chipyard-system-customization/
-      - title: "  ↳ Customizing Core Parameters"
-        url: /tutorials/V-chipyard-system-customization/core/
-      - title: "  ↳ Memory Subsystem"
-        url: /tutorials/V-chipyard-system-customization/memory/
-      - title: "  ↳ Peripheral Modifications"
-        url: /tutorials/V-chipyard-system-customization/peripherals/
-      - title: "  ↳ Custom Accelerators"
-        url: /tutorials/V-chipyard-system-customization/accelerators/
+        children:
+          - title: "V.1 Customizing Core Parameters"
+            url: /tutorials/V-chipyard-system-customization/core/
+          - title: "V.2 Memory Subsystem"
+            url: /tutorials/V-chipyard-system-customization/memory/
+          - title: "V.3 Peripheral Modifications"
+            url: /tutorials/V-chipyard-system-customization/peripherals/
+          - title: "V.4 Custom Accelerators"
+            url: /tutorials/V-chipyard-system-customization/accelerators/
   - title: "Hardware Security"
     children:
       - title: "I. Hardware Security Basics"
