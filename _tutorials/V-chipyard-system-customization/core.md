@@ -15,16 +15,17 @@ classes: text-justify
 
 ## Introduction
 
-This tutorial demonstrates how to customize RISC-V core parameters in Chipyard, including ISA extensions, cache configurations, and pipeline parameters. We'll walk through practical examples of modifying the Rocket core configuration to suit different application requirements.
+This tutorial demonstrates how to customize RISC-V core parameters in Chipyard, including core architecture, ISA extensions and, cache configurations. We'll walk through 
+some basic understandings of the building block for Rocket core and some practical examples of modifying the Rocket core configuration to suit different application requirements.
 
 ## Prerequisites
 
 - Completed [Getting Started with Chipyard](/tutorials/II-chipyard-getting-started/)
 - Basic understanding of RISC-V ISA
-- Familiarity with Scala syntax
-- Working Chipyard environment
+- Basic understanding of computer architecture
+- Familiarity with Scala syntax and Chipyard environment
 
-## 1. Understanding Default Core Configuration
+## 1. Understanding Core Configuration
 Let's take a look at the system perspective
 ```mathematica
 RocketTile
@@ -430,19 +431,21 @@ Both instruction cache (I$) and data cache (D$) share the same minimal configura
 
 Cache sizes can be adjusted at the system level using configuration fragments like `WithL1ICacheSets` and `WithL1DCacheSets`
 
-## 2. Example customization
+## 2. Example single-core customization
 
 ### 2.1 Modifying core architecture and ISA extensions
 
 The simplest modification to the RocketTile is changing the core configuration from RV32 to RV64 or viceversa. Moreover, depending on the applications, some extensions can be added.
 
 **a. Core customizations**
-My recommendation is whenever you want a new core configurations, let's create a new configuration in: 
+
+The default Rocket core configuration is RV32I, in this example, let's add some extensions to enable the RV32IMAC architecture. My recommendation is whenever you want a new core configurations, let's create a new configuration in the Rocket core configurations similar to the default: 
+
 ```scala
 // Path to file
 // \generators\rocket-chip\src\main\scala\rocket\Configs.scala
 
-class WithNRV32ICores(
+class WithNRV32IMACCores( // an example for a RV32IMAC core
   n: Int,
   crossing: RocketCrossingParams = RocketCrossingParams(),
 ) extends Config((site, here, up) => {
@@ -455,213 +458,168 @@ class WithNRV32ICores(
     pgLevels = 2,
     useVM = false,
     fpu = None,
-    // mulDiv = Some(MulDivParams(mulUnroll = 8)),
-    mulDiv = None,
-    useAtomics = false,
-    useCompressed = false
+    mulDiv = Some(MulDivParams(mulUnroll = 8)), // M-extension
+    useAtomics = true, // A-extension
+    useCompressed = true //C-extension
     ),
   ..........
 ```
-- xLen: 32 or 64 to choose RV32 or RV64 respectively
-- fpu: example `Some(FPUParams(minFLen = 16))` for floating-point unit (FPU) with half-precision support (16-bit floats)
-- mulDiv: example `Some(MulDivParams(mulUnroll = 8))` for a hardware multiply/divide unit with an 8-bit unroll factor for the multiplier
-- useAtomics: false or true
-- useCompressed: false or true
+- `xLen = 32` still using RV32
+- `fpu = None` as we do not need F/D-extension. But in case you need it,  `fpu=Some(FPUParams(minFLen = 16))` for floating-point unit (FPU) with half-precision support (16-bit floats)
+- `mulDiv = Some(MulDivParams(mulUnroll = 8))` for a hardware multiply/divide unit with an 8-bit unroll factor for the multiplier
+- `useAtomics = true`
+- `useCompressed = true`
 
 **b. Cache size customization**
 
-For the cache customization, you can set the value of `nSets` and `nWays` in the RocketTile configurations. However, I think this option affects the memory utilization and chip area on FPGA and ASIC, thus, this option should be change at the system level configuration for easy changing memory usage depending on the hardware that you have.
-
-
-
-
-<!-- 
-### Common Configuration Fragments
-
-Here are the most frequently used core configuration fragments:
+For the cache customization, you can set the value of `nSets` and `nWays` in the RocketTile configurations. However, I think this option affects the resource utilization and chip area on FPGA and ASIC, thus, this option should be change at the system level configuration for easy changing memory usage depending on the hardware that you have. The parameters `nSets` and `nWays` can be overriden as the following example in the system configuration to keep the cache size still at 2KB, but changing the cache structure to 8-set and 4-way:
 
 ```scala
-// Number and type of cores
-new WithNRV32ICores(1)        // 1 RV32I core
-new WithNRV64GCCores(2)       // 2 RV64GC cores
-new WithNBigCores(4)          // 4 big (out-of-order) cores
-new WithNSmallCores(8)        // 8 small (in-order) cores
+//Path to file
+//base/src/main/scala/arty100t/Configs.scala
 
-// ISA extensions
-new WithRV32               // 32-bit base
-new WithRV64               // 64-bit base (default)
-new WithoutFPU             // Remove floating-point
-new WithRVC                // Compressed instructions
-new WithRVA                // Atomic instructions
-new WithRVV                // Vector extension
-new WithCustom             // Custom extension
+class BaseRocketArty100TConfig extends Config(
+  new WithBaseArty100TTweaks(isAsicCompatible=false) ++
 
-// Cache sizes (in KB)
-new WithL1ICacheSets(64)   // I-cache sets
-new WithL1DCacheSets(64)   // D-cache sets
-new WithL1ICacheWays(4)    // I-cache ways
-new WithL1DCacheWays(4)    // D-cache ways
-``` -->
-<!-- 
-## Example 1: Creating a Custom RV32I Configuration
-
-Let's create a custom configuration for a simple RV32I system with modified cache sizes.
-
-### Step 1: Define the Configuration
-
-Create or edit `base/src/main/scala/arty100t/Configs.scala`:
-
-```scala
-class CustomRV32IConfig extends Config(
-  // Custom cache configuration
-  new freechips.rocketchip.subsystem.WithL1ICacheSets(32) ++  // 32 sets = 4KB I-cache
-  new freechips.rocketchip.subsystem.WithL1DCacheSets(32) ++  // 32 sets = 4KB D-cache
-  new freechips.rocketchip.subsystem.WithL1ICacheWays(2) ++   // 2-way set associative
-  new freechips.rocketchip.subsystem.WithL1DCacheWays(2) ++   // 2-way set associative
-  
-  // RV32I core with specific features
+  // Configuration for $I and $D caches (8 sets × 4 ways × 64B = 2KB)
+  new freechips.rocketchip.rocket.WithL1ICacheWays(4) ++  // 4-way I-Cache
+  new freechips.rocketchip.rocket.WithL1DCacheWays(4) ++  // 4-way D-Cache
+  new freechips.rocketchip.rocket.WithL1ICacheSets(8) ++  // 8-set I-Cache 
+  new freechips.rocketchip.rocket.WithL1DCacheSets(8) ++  // 8-set D-Cache
   new freechips.rocketchip.rocket.WithNRV32ICores(1) ++
-  
-  // Platform-specific tweaks
-  new WithBaseArty100TTweaks(isAsicCompatible=false) ++
   new chipyard.config.AbstractConfig
 )
 ```
+**c. Modification verification**
+After changing the core configurations, let's generate the verilog files with `make SUB_PROJECT=X CONFIG=Y verilog`.
+When it is completed, you can verify the modifications my looking at the generated device tree. The file can be found at:
 
-### Step 2: Build the Configuration
+```yaml
+# Checking .dts file for core modifications
+base/01-generated-src/chipyard.base.<X>.<X>Harness.<Y>/chipyard.base.<X>.<X>Harness.<Y>.dts
+```
+
+The device tree describes the system configuration and used for linux booting proccess. This file comes in handy,in a bare-metal system where we can use it to check the system configurations whether it is matched with our modifications. The line indicate `riscv,isa = "rv32imaczicsr_zifencei_zihpm_xrocket";` showing that we have successfully configured the core to be **RV32IMAC**.
 
 ```bash
-cd base/
-make SUB_PROJECT=arty100t CONFIG=CustomRV32IConfig verilog
+...
+  L2: cpus {
+    #address-cells = <1>;
+    #size-cells = <0>;
+    timebase-frequency = <50000>;
+    L12: cpu@0 {
+      clock-frequency = <0>;
+      compatible = "sifive,rocket0", "riscv";
+      d-cache-block-size = <64>;
+      d-cache-sets = <32>;
+      d-cache-size = <2048>;
+      device_type = "cpu";
+      hardware-exec-breakpoint-count = <1>;
+      i-cache-block-size = <64>;
+      i-cache-sets = <32>;
+      i-cache-size = <2048>;
+      next-level-cache = <&L24 &L25>;
+      reg = <0x0>;
+      riscv,isa = "rv32imaczicsr_zifencei_zihpm_xrocket";
+      riscv,pmpgranularity = <4>;
+      riscv,pmpregions = <8>;
+      status = "okay";
+      timebase-frequency = <50000>;
+      L10: interrupt-controller {
+        #interrupt-cells = <1>;
+        compatible = "riscv,cpu-intc";
+        interrupt-controller;
+      };
+    };
+  };
+...
 ```
 
-### Step 3: Verify the Configuration
 
-Check the generated device tree to confirm ISA and cache sizes:
+### 2.2 Matching software compilation
+
+Now that we have the hardware configured for the **RV32IMAC**, let's not forget that the software should be compiled to match with the hardware configuration.
+There are two pieces of software that we need to check: (a) bootROM, and (b) main software. The modification is straightforward. Simply change the compilation flag `-march` to match **RV32IMAC**.
+
+**a. BootROM**
+On arty100t fpga, depending on your RAM configuration, you'll have to change the flag on the correct directory either `sdboot\` or `sdboot-scratchpad\`. Modifying the flag `CFLAGS=-march=rv32imaczicsr_zifencei_zihpm ...` .The modification looks like this for `sdboot-scratchpad\`:
 
 ```bash
-cat generated-src/*/chipyard.base.arty100t.*.dts | grep -A 5 "cpu@0"
+#Path to file
+#base/src/main/resources/arty100t/sdboot-scratchpad/Makefile
+
+# RISCV environment variable must be set
+ROOT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+BUILD_DIR := $(ROOT_DIR)/build
+
+CC=$(RISCV)/bin/riscv64-unknown-elf-gcc
+OBJCOPY=$(RISCV)/bin/riscv64-unknown-elf-objcopy
+OBJDUMP=$(RISCV)/bin/riscv64-unknown-elf-objdump
+CFLAGS=-march=rv32imaczicsr_zifencei_zihpm -mcmodel=medany -O2 -std=gnu11 -Wall -nostartfiles
+CFLAGS+= -fno-common -g -DENTROPY=0 -mabi=ilp32 -DNONSMP_HART=0
+CFLAGS+= -I $(ROOT_DIR)/include -I.
+LFLAGS=-static -nostdlib -L $(ROOT_DIR)/linker -T sdboot.elf.lds
+...
 ```
 
-Expected output should show:
-```
-cpu@0 {
-    device_type = "cpu";
-    reg = <0x0>;
-    status = "okay";
-    compatible = "riscv";
-    riscv,isa = "rv32i";  // Confirm RV32I
-    ...
-}
-```
-
-## Example 2: Dual-Core RV64GC Configuration
-
-Create a dual-core system with full ISA support (GC extensions):
-
-```scala
-class DualCoreRV64GCConfig extends Config(
-  // Two RV64GC cores (G = IMAFD, C = compressed)
-  new freechips.rocketchip.subsystem.WithNBigCores(2) ++
-  
-  // Larger caches for better performance
-  new freechips.rocketchip.subsystem.WithL1ICacheSets(64) ++  // 8KB I-cache
-  new freechips.rocketchip.subsystem.WithL1DCacheSets(64) ++  // 8KB D-cache
-  new freechips.rocketchip.subsystem.WithL1ICacheWays(4) ++   // 4-way
-  new freechips.rocketchip.subsystem.WithL1DCacheWays(4) ++   // 4-way
-  
-  // Platform configuration
-  new WithBaseArty100TTweaks(isAsicCompatible=false) ++
-  new chipyard.config.AbstractConfig
-)
-```
-
-### Multi-Core Considerations
-
-When adding multiple cores:
-1. **Memory bandwidth**: Ensure your memory subsystem can handle concurrent accesses
-2. **Cache coherence**: Rocket cores include built-in cache coherence (MESI protocol)
-3. **Interrupt routing**: Configure CLINT and PLIC for multiple harts
-4. **Boot sequence**: All harts start at reset; use `mhartid` to differentiate
-
-## Example 3: Embedded RV32IMC Configuration
-
-For resource-constrained designs, create a minimal configuration:
-
-```scala
-class TinyRV32IMCConfig extends Config(
-  // Minimal cache sizes
-  new freechips.rocketchip.subsystem.WithL1ICacheSets(16) ++  // 2KB I-cache
-  new freechips.rocketchip.subsystem.WithL1DCacheSets(16) ++  // 2KB D-cache
-  new freechips.rocketchip.subsystem.WithL1ICacheWays(1) ++   // Direct-mapped
-  new freechips.rocketchip.subsystem.WithL1DCacheWays(1) ++   // Direct-mapped
-  
-  // RV32IMC core (Integer + Multiply + Compressed)
-  new freechips.rocketchip.rocket.WithNRV32IMCCores(1) ++
-  
-  // Disable FPU
-  new freechips.rocketchip.subsystem.WithoutFPU ++
-  
-  // Platform configuration
-  new WithBaseArty100TTweaks(isAsicCompatible=false) ++
-  new chipyard.config.AbstractConfig
-)
-```
-
-## Understanding Cache Parameters
-
-### Cache Size Calculation
-
-```
-Cache Size = Sets × Ways × Block Size
-```
-
-For Rocket cores:
-- **Block Size**: Fixed at 64 bytes (cache line size)
-- **Sets**: Configurable (power of 2)
-- **Ways**: Configurable (typically 1, 2, 4, or 8)
-
-Example calculations:
-```
-16 sets × 2 ways × 64 bytes = 2 KB
-32 sets × 4 ways × 64 bytes = 8 KB
-64 sets × 8 ways × 64 bytes = 32 KB
-```
-
-### Cache Hierarchy
-
-Rocket cores have separate L1 I-cache and D-cache:
-- **L1 I-cache**: Instruction cache (read-only)
-- **L1 D-cache**: Data cache (read/write, write-back policy)
-- **L2 cache**: Optional, shared across cores
-
-## Verifying Your Configuration
-
-### 1. Check Generated Files
+**b. Main software**
+The main software modification is similar as the following example:
 
 ```bash
-# Memory map
-cat generated-src/*/chipyard.base.*.memmap.json | jq '.[] | select(.name | contains("cache"))'
+#Path to file
+#base/sw/helloWorld/Makefile
 
-# Device tree
-cat generated-src/*/chipyard.base.*.dts
+#################################
+# RISCV Toolchain
+#################################
+
+ROOT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+BUILD_DIR := $(ROOT_DIR)build
+
+CC=$(RISCV)/bin/riscv64-unknown-elf-gcc
+OBJCOPY=$(RISCV)/bin/riscv64-unknown-elf-objcopy
+OBJDUMP=$(RISCV)/bin/riscv64-unknown-elf-objdump
+CFLAGS=-march=rv32imaczicsr_zifencei_zihpm -mcmodel=medany -O0 -std=gnu11 -Wall -nostartfiles
+CFLAGS+= -fno-common -g -DENTROPY=0 -mabi=ilp32 -DNONSMP_HART=0
+CFLAGS+= -I $(ROOT_DIR)/include -I.
+LFLAGS=-static -nostdlib -L $(ROOT_DIR)/linker -T hello.elf.lds
+...
 ```
 
-### 2. Resource Utilization
+**c. Notes**
+The flag `-mabi=ipl32` flag specifies the **Application Binary Interface (ABI)** for the RISC-V compiler.
+The `-march` and `-mabi` comes in a pair and should be match for configurations.
 
-After synthesis, check FPGA resource usage:
-```bash
-cat generated-src/*/obj/*_utilization.rpt
-```
+**Common RISC-V ABIs**
 
-### 3. Software Testing
+| Architecture | ABI | Description |
+|:-------------|:----|:------------|
+| **RV32** | `ilp32` | Soft-float (no FP registers, FP operations done in integer registers) |
+| (32-bit) | `ilp32f` | Single-precision float (uses F registers) |
+|          | `ilp32d` | Double-precision float (uses F and D registers) |
+| **RV64** | `lp64` | Long/Pointer are 64-bit, int is 32-bit |
+| (64-bit) | `lp64f` | LP64 with single-precision float |
+|          | `lp64d` | LP64 with double-precision float |
 
-Compile and run test programs:
-```bash
-cd base/sw/custom_test/
-make bin
-# Load to SD card and test
-``` -->
+As you can see, the ABI specifies the single-precision and double-precision float. Because the current configuration is RV32IMAC which does not support for FPU, the corresponding ABI should be `-mabi=ilp32`.
+
+## 3. Example BoomCore configuration
+
+> **Note**: This section is currently under development and will be added in a future update.
+
+BOOM (Berkeley Out-of-Order Machine) configuration will cover:
+- Out-of-order execution parameters
+- Branch prediction units specific to BOOM
+
+## 4. Example MultiCore configuration
+
+> **Note**: This section is currently under development and will be added in a future update.
+
+Multi-core configuration will demonstrate:
+- Adding multiple Rocket cores or heterogenous configurations
+- Cache coherence configuration
+- Inter-core communication setup
+
 
 ## Common Configuration Issues
 
@@ -677,18 +635,10 @@ make bin
 **Symptom**: System slower than expected
 **Solution**: Increase cache sizes, check for cache thrashing
 
-## Performance Tuning Guidelines
-
-1. **Start small**: Begin with minimal caches, increase as needed
-2. **Profile first**: Use performance counters to identify bottlenecks
-3. **Balance resources**: Don't over-provision caches on constrained FPGAs
-4. **Consider workload**: Size caches based on working set size
-
 ## Next Steps
 
-- [Child Item 2: Adding Custom Peripherals](/tutorials/V-chipyard-system-customization/child2/)
-- [Understanding Chipyard System Architecture](/tutorials/III-understand-chipyard-system/)
-- Explore advanced cache configurations (prefetchers, replacement policies)
+- Explore [Customizing Memory Subsystem](/tutorials/V-chipyard-system-customization/memory/)
+- Review [Understanding Chipyard System Architecture](/tutorials/III-understand-chipyard-system/)
 
 ## Resources
 
